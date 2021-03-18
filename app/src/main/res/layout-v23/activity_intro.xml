@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/intro_background"
     android:gravity="center_horizontal"
+    android:background="@android:color/white"
     android:orientation="vertical"
     tools:context=".activity.IntroActivity">
 
@@ -21,7 +21,9 @@
 
     <ImageView
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="280dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginStart="20dp"
         android:layout_marginTop="@dimen/intro_screen_image_marginTop"
         android:contentDescription="@string/image_contentDescription"
         android:src="@drawable/ic_task_image" />
@@ -60,6 +62,7 @@
         android:paddingTop="@dimen/btn_paddingTopBottom"
         android:paddingBottom="@dimen/btn_paddingTopBottom"
         android:text="@string/sign_in"
+        android:textStyle="bold"
         android:textColor="@android:color/white"
         android:textSize="@dimen/btn_text_size" />
 
@@ -77,7 +80,7 @@
         android:paddingTop="@dimen/btn_paddingTopBottom"
         android:paddingBottom="@dimen/btn_paddingTopBottom"
         android:text="@string/sign_up"
-        android:textColor="@color/colorAccent"
+        android:textColor="@color/colorPrimaryLight"
         android:textSize="@dimen/btn_text_size" />
 
 </LinearLayout>

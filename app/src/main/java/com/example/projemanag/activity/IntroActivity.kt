@@ -7,7 +7,7 @@ import android.view.WindowManager
 import com.example.projemanag.R
 import kotlinx.android.synthetic.main.activity_intro.*
 
-class IntroActivity : AppCompatActivity() {
+class IntroActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

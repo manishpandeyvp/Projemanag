@@ -8,4 +8,6 @@
     <color name="primaryTextColor">#363A43</color>
     <color name="secondaryTextColor">#7A8089</color>
 
+    <color name="snackbar_error_color">#F72000</color>
+
 </resources>

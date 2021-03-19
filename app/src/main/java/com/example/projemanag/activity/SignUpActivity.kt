@@ -60,7 +60,7 @@ class SignUpActivity : BaseActivity() {
                     FirebaseAuth.getInstance().signOut()
                     finish()
                 } else {
-                    Toast.makeText(this, task.exception!!.message, Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "Registration Failed", Toast.LENGTH_SHORT).show()
                 }
             }
         }

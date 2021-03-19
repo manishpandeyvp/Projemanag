@@ -3,7 +3,10 @@ package com.example.projemanag.activity
 import android.app.Dialog
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Toast
 import com.example.projemanag.R
+import com.google.firebase.auth.FirebaseAuth
+import kotlinx.android.synthetic.main.loading.*
 
 open class BaseActivity : AppCompatActivity() {
 
@@ -15,5 +18,33 @@ open class BaseActivity : AppCompatActivity() {
         setContentView(R.layout.activity_base)
     }
 
+    fun showProgressDialog(text: String){
+        mProgressDialog = Dialog(this)
+        mProgressDialog.setContentView(R.layout.loading)
+        mProgressDialog.tv_progress_text.text = text
 
+        mProgressDialog.show()
+    }
+
+    fun hideProgressDialog(){
+        mProgressDialog.dismiss()
+    }
+
+    fun getCurrentUserID(): String{
+        return FirebaseAuth.getInstance().currentUser!!.uid
+    }
+
+    fun doubleBackToExit(){
+        if(doubleBackToExitPressedOnce){
+            super.onBackPressed()
+            return
+        }
+
+        this.doubleBackToExitPressedOnce = true
+        Toast.makeText(
+            this,
+            resources.getString(R.string.please_click_back_again_to_exit),
+            Toast.LENGTH_SHORT
+        ).show()
+    }
 }

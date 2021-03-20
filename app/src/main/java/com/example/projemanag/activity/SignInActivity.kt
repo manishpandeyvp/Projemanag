@@ -1,7 +1,6 @@
 package com.example.projemanag.activity
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.TextUtils
 import android.util.Log
@@ -10,7 +9,6 @@ import android.widget.Toast
 import com.example.projemanag.R
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_sign_in.*
-import kotlinx.android.synthetic.main.activity_sign_up.*
 
 class SignInActivity : BaseActivity() {
 
@@ -53,7 +51,7 @@ class SignInActivity : BaseActivity() {
 
         if(validateForm(email, password)){
             showProgressDialog(resources.getString(R.string.please_wait))
-            auth.signInWithEmailLink(email, password).addOnCompleteListener(this) {
+            auth.signInWithEmailAndPassword(email, password).addOnCompleteListener(this) {
                 task ->
                 hideProgressDialog()
                 if(task.isSuccessful){

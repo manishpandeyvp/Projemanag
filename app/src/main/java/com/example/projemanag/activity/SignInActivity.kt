@@ -59,7 +59,7 @@ class SignInActivity : BaseActivity() {
                 if(task.isSuccessful){
                     Log.d("Sign in", "signInWithEmail: Success")
                     val user = auth.currentUser
-                    FirestoreClass().signInUser(this)
+                    FirestoreClass().loadUserData(this)
 //                    startActivity(Intent(this, MainActivity::class.java))
                 } else {
                     Log.w("Sign in", "signInWithEmail: Failure")

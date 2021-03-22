@@ -1,13 +1,16 @@
 package com.example.projemanag.activity
 
 import android.Manifest
+import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
+import android.util.Log
 import android.view.WindowManager
+import android.webkit.MimeTypeMap
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -15,9 +18,12 @@ import com.bumptech.glide.Glide
 import com.example.projemanag.R
 import com.example.projemanag.firebase.FirestoreClass
 import com.example.projemanag.models.User
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
 import kotlinx.android.synthetic.main.activity_my_profile.*
+import java.io.IOException
 
-class MyProfileActivity : AppCompatActivity() {
+class MyProfileActivity : BaseActivity() {
 
     companion object{
         private const val READ_STORAGE_PERMISSION_CODE = 1
@@ -25,6 +31,7 @@ class MyProfileActivity : AppCompatActivity() {
     }
 
     private var mSelectedImageFileUri : Uri? = null
+    private var mProfileImageURL : String= ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -68,6 +75,23 @@ class MyProfileActivity : AppCompatActivity() {
         startActivityForResult(galleryIntent, PICK_IMAGE_REQUEST_CODE)
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if(resultCode == Activity.RESULT_OK && requestCode == PICK_IMAGE_REQUEST_CODE && data!!.data != null){
+            mSelectedImageFileUri = data.data
+            try {
+                Glide
+                    .with(this@MyProfileActivity)
+                    .load(mSelectedImageFileUri).centerCrop()
+                    .placeholder(R.drawable.ic_person_black_24dp)
+                    .into(iv_user_image_my_profile)
+            }catch (e: IOException){
+                e.printStackTrace()
+            }
+
+        }
+    }
+
     private fun setupActionBar(){
         setSupportActionBar(toolbar_my_profile_activity)
         val actionBar = supportActionBar
@@ -93,5 +117,32 @@ class MyProfileActivity : AppCompatActivity() {
         if(user.mobileNum != 0L){
             et_mob_num_my_profile.setText(user.mobileNum.toString())
         }
+    }
+
+    private fun uploadUserImage(){
+        showProgressDialog(resources.getString(R.string.please_wait))
+        if(mSelectedImageFileUri != null){
+            val sRef: StorageReference = FirebaseStorage.getInstance().reference.child(
+                "USER_IMAGE" +
+                    System.currentTimeMillis() +
+                    "." +
+                    getFileExtension(mSelectedImageFileUri)
+            )
+
+            sRef.putFile(mSelectedImageFileUri!!).addOnSuccessListener {
+                taskSnapshot ->
+                Log.e("Firebase Image URL", taskSnapshot.metadata!!.reference!!.downloadUrl.toString())
+
+                taskSnapshot.metadata!!.reference!!.downloadUrl.addOnSuccessListener {
+                    uri ->
+                    Log.e("Downloadable Image URL", uri.toString())
+                    mProfileImageURL = uri.toString()
+                }
+            }
+        }
+    }
+
+    private fun getFileExtension(uri: Uri?): String?{
+        return MimeTypeMap.getSingleton().getExtensionFromMimeType(contentResolver.getType(uri!!))
     }
 }

@@ -32,6 +32,7 @@ class MyProfileActivity : BaseActivity() {
 
     private var mSelectedImageFileUri : Uri? = null
     private var mProfileImageURL : String= ""
+    private lateinit var mUserDetails: User
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,6 +52,12 @@ class MyProfileActivity : BaseActivity() {
                 showImageChooser()
             }else{
                 ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), READ_STORAGE_PERMISSION_CODE)
+            }
+        }
+
+        btn_update.setOnClickListener {
+            if(mSelectedImageFileUri != null){
+                uploadUserImage()
             }
         }
     }
@@ -137,12 +144,22 @@ class MyProfileActivity : BaseActivity() {
                     uri ->
                     Log.e("Downloadable Image URL", uri.toString())
                     mProfileImageURL = uri.toString()
+                    hideProgressDialog()
                 }
+            }.addOnFailureListener{
+                exception ->
+                Toast.makeText(this@MyProfileActivity, exception.message, Toast.LENGTH_SHORT).show()
+                hideProgressDialog()
             }
         }
     }
 
     private fun getFileExtension(uri: Uri?): String?{
         return MimeTypeMap.getSingleton().getExtensionFromMimeType(contentResolver.getType(uri!!))
+    }
+
+    fun profileUpdateSuccess(){
+        hideProgressDialog()
+        finish()
     }
 }

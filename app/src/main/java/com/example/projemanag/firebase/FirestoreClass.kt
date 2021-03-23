@@ -2,6 +2,7 @@ package com.example.projemanag.firebase
 
 import android.app.Activity
 import android.util.Log
+import android.widget.Toast
 import com.example.projemanag.activity.MainActivity
 import com.example.projemanag.activity.MyProfileActivity
 import com.example.projemanag.activity.SignInActivity
@@ -11,6 +12,7 @@ import com.example.projemanag.utils.Constants
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
+import java.util.concurrent.CompletionStage
 
 class FirestoreClass {
     private val mFireStore = FirebaseFirestore.getInstance()
@@ -64,5 +66,18 @@ class FirestoreClass {
             currentUserID = currentUser.uid
         }
         return currentUserID
+    }
+
+    fun updateUserProfileData(activity: MyProfileActivity, userHashMap: HashMap<String, Any>){
+        mFireStore.collection(Constants.USERS).document(getCurrentUserId()).update(userHashMap).addOnSuccessListener {
+            Log.e(activity.javaClass.simpleName, "Profile Data Updated Successfully!")
+            Toast.makeText(activity, "Profile updated successfully!!", Toast.LENGTH_SHORT).show()
+            activity.profileUpdateSuccess()
+        }.addOnFailureListener {
+            exception ->
+            activity.hideProgressDialog()
+            Log.e(activity.javaClass.simpleName, "Error while creating a board.", exception)
+            Toast.makeText(activity, "Some error occurred while updating profile!", Toast.LENGTH_SHORT).show()
+        }
     }
 }

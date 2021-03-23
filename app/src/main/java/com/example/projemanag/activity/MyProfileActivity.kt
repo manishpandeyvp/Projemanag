@@ -18,6 +18,7 @@ import com.bumptech.glide.Glide
 import com.example.projemanag.R
 import com.example.projemanag.firebase.FirestoreClass
 import com.example.projemanag.models.User
+import com.example.projemanag.utils.Constants
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import kotlinx.android.synthetic.main.activity_my_profile.*
@@ -58,6 +59,9 @@ class MyProfileActivity : BaseActivity() {
         btn_update.setOnClickListener {
             if(mSelectedImageFileUri != null){
                 uploadUserImage()
+            } else {
+                showProgressDialog(resources.getString(R.string.please_wait))
+                updateUserProfileData()
             }
         }
     }
@@ -113,6 +117,8 @@ class MyProfileActivity : BaseActivity() {
     }
 
     fun setUserDataUI(user: User){
+
+        mUserDetails = user
         Glide
             .with(this@MyProfileActivity)
             .load(user.image).centerCrop()
@@ -144,7 +150,7 @@ class MyProfileActivity : BaseActivity() {
                     uri ->
                     Log.e("Downloadable Image URL", uri.toString())
                     mProfileImageURL = uri.toString()
-                    hideProgressDialog()
+                    updateUserProfileData()
                 }
             }.addOnFailureListener{
                 exception ->
@@ -161,5 +167,24 @@ class MyProfileActivity : BaseActivity() {
     fun profileUpdateSuccess(){
         hideProgressDialog()
         finish()
+    }
+
+    private fun updateUserProfileData(){
+        val userHashMap= HashMap<String, Any>()
+
+        if(mProfileImageURL.isNotEmpty() && mProfileImageURL != mUserDetails.image){
+            userHashMap[Constants.IMAGE] = mProfileImageURL
+        }
+
+        if(et_name_my_profile.text.toString() != mUserDetails.name){
+            userHashMap[Constants.NAME] = et_name_my_profile.text.toString()
+        }
+
+        if(et_mob_num_my_profile.text.toString() != mUserDetails.mobileNum.toString()){
+            userHashMap[Constants.MOBILE] = et_mob_num_my_profile.text.toString().toLong()
+        }
+
+        FirestoreClass().updateUserProfileData(this, userHashMap)
+
     }
 }

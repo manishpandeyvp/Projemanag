@@ -18,8 +18,9 @@ import kotlinx.android.synthetic.main.activity_create_board.*
 import kotlinx.android.synthetic.main.activity_my_profile.*
 import java.io.IOException
 
-class CreateBoardActivity : AppCompatActivity() {
+class CreateBoardActivity : BaseActivity() {
     private var mSelectedImageFileUri : Uri? = null
+    private lateinit var mUserName: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,6 +32,10 @@ class CreateBoardActivity : AppCompatActivity() {
         )
 
         setupActionBar()
+
+        if(intent.hasExtra(Constants.NAME)){
+            mUserName = intent.getStringExtra(Constants.NAME)!!
+        }
 
         iv_user_image_create_board.setOnClickListener {
             if(ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED){
@@ -84,5 +89,10 @@ class CreateBoardActivity : AppCompatActivity() {
             }
 
         }
+    }
+
+    fun boardCreatedSuccessfully(){
+        hideProgressDialog()
+        finish()
     }
 }

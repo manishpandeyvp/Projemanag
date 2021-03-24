@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:background="?attr/selectableItemBackground"
     android:orientation="vertical"
     android:layout_marginBottom="@dimen/item_board_content_marginBottom">
@@ -22,6 +23,30 @@
             android:src="@drawable/ic_board_place_holder"
             app:civ_border_color="@color/primaryTextColor"
             app:civ_border_width="@dimen/item_board_image_circular_border_width"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/item_board_name_layout_marginStart"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/primaryTextColor"
+                android:textSize="@dimen/item_board_name_text_size"
+                tools:text="Board Name"/>
+
+            <TextView
+                android:id="@+id/tv_created_by"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/secondaryTextColor"
+                android:textSize="@dimen/item_board_created_by_text_size"
+                tools:text="Created By"/>
+
+        </LinearLayout>
     </LinearLayout>
 
 </LinearLayout>

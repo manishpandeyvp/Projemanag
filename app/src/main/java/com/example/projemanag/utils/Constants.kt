@@ -5,13 +5,14 @@ import android.content.Intent
 import android.net.Uri
 import android.provider.MediaStore
 import android.webkit.MimeTypeMap
-import com.example.projemanag.activity.MyProfileActivity
 
 object Constants {
     const val USERS: String = "Users"
     const val IMAGE: String = "image"
     const val NAME: String = "name"
     const val MOBILE: String = "mobile"
+
+    const val ASSIGNED_TO: String = "assignedTo"
 
     const val BOARDS: String = "boards"
 

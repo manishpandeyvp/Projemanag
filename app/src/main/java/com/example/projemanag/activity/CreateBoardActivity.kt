@@ -5,7 +5,6 @@ import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.WindowManager
@@ -20,7 +19,6 @@ import com.example.projemanag.utils.Constants
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import kotlinx.android.synthetic.main.activity_create_board.*
-import kotlinx.android.synthetic.main.activity_my_profile.*
 import java.io.IOException
 
 class CreateBoardActivity : BaseActivity() {
@@ -110,7 +108,7 @@ class CreateBoardActivity : BaseActivity() {
         val assignedUsersArrayList: ArrayList<String> = ArrayList()
         assignedUsersArrayList.add(getCurrentUserID())
 
-        var board = Board(
+        val board = Board(
             et_board_name.text.toString(),
             mBoardImageUrl,
             mUserName,
@@ -149,6 +147,7 @@ class CreateBoardActivity : BaseActivity() {
 
     fun boardCreatedSuccessfully(){
         hideProgressDialog()
+        setResult(Activity.RESULT_OK)
         finish()
     }
 }

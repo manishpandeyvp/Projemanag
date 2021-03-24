@@ -10,4 +10,6 @@
 
     <color name="snackbar_error_color">#F72000</color>
 
+    <color name="divider_color">#EAEAEA</color>
+
 </resources>

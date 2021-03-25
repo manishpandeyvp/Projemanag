@@ -95,7 +95,7 @@ class CreateBoardActivity : BaseActivity() {
                 Glide
                     .with(this)
                     .load(mSelectedImageFileUri).centerCrop()
-                    .placeholder(R.drawable.ic_person_black_24dp)
+                    .placeholder(R.drawable.ic_board_place_holder)
                     .into(iv_user_image_create_board)
             }catch (e: IOException){
                 e.printStackTrace()

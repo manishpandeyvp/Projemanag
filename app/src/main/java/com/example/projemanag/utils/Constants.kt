@@ -11,7 +11,7 @@ object Constants {
     const val IMAGE: String = "image"
     const val NAME: String = "name"
     const val MOBILE: String = "mobile"
-
+    const val DOCUMENT_ID: String = "documentId"
     const val ASSIGNED_TO: String = "assignedTo"
 
     const val BOARDS: String = "boards"

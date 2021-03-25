@@ -9,12 +9,12 @@
     tools:context=".activity.TaskListActivity">
 
     <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar_create_board_activity"
+        android:id="@+id/toolbar_task_list_activity"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize">
 
         <TextView
-            android:id="@+id/tv_toolbar_activity_task"
+            android:id="@+id/tv_toolbar_task_list"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center_vertical"

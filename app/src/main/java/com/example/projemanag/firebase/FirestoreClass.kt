@@ -56,6 +56,18 @@ class FirestoreClass {
         }
     }
 
+    fun getBoardDetails(activity: TaskListActivity, documentId: String){
+        mFireStore.collection(Constants.BOARDS).document(documentId).get().addOnSuccessListener {
+                document ->
+            Log.i(activity.javaClass.simpleName, document.toString())
+            activity.boardDetails(document.toObject(Board::class.java)!!)
+        }.addOnFailureListener {
+                e ->
+            activity.hideProgressDialog()
+            Log.e(activity.javaClass.simpleName, "Error while loading board", e)
+        }
+    }
+
     fun loadUserData(activity: Activity, readBoardsList: Boolean = false){
         mFireStore.collection(Constants.USERS)
             .document(getCurrentUserId())

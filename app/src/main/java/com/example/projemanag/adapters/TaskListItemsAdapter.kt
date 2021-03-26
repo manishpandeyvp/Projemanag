@@ -88,6 +88,11 @@ open class TaskListItemsAdapter (
                     Toast.makeText(context, "Please enter a list name!", Toast.LENGTH_SHORT).show()
                 }
             }
+
+            holder.itemView.ib_delete_list.setOnClickListener {
+                alertDialogForDeleteList(position, model.title)
+            }
+
         }
     }
 
@@ -96,6 +101,20 @@ open class TaskListItemsAdapter (
         builder.setTitle("Alert")
         builder.setMessage("Are you sure you want to delete $title?")
         builder.setIcon(android.R.drawable.ic_dialog_alert)
+        builder.setPositiveButton("Yes"){
+            dialogInterface, _ ->
+            dialogInterface.dismiss()
+            if(context is TaskListActivity) {
+                context.deleteTaskList(position)
+            }
+        }
+        builder.setNegativeButton("No"){
+            dialogInterface, _ ->
+            dialogInterface.dismiss()
+        }
+        val alertDialog: AlertDialog = builder.create()
+        alertDialog.setCancelable(false)
+        alertDialog.show()
     }
 
     private fun Int.toDp(): Int = (this/Resources.getSystem().displayMetrics.density).toInt()

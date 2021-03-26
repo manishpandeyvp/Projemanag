@@ -3,34 +3,33 @@ package com.example.projemanag.models
 import android.os.Parcel
 import android.os.Parcelable
 
-data class Task (
-    var title: String ="",
+data class Card (
+    val name: String ="",
     val createdBy: String = "",
-    val cards: ArrayList<Card> = ArrayList()
+    val assignedTo: ArrayList<String> = ArrayList()
 ): Parcelable {
     constructor(parcel: Parcel) : this(
         parcel.readString()!!,
         parcel.readString()!!,
-        parcel.createTypedArrayList(Card.CREATOR)!!
-    ) {
-    }
+        parcel.createStringArrayList()!!
+    )
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
-        parcel.writeString(title)
+        parcel.writeString(name)
         parcel.writeString(createdBy)
-        parcel.writeTypedList(cards)
+        parcel.writeStringList(assignedTo)
     }
 
     override fun describeContents(): Int {
         return 0
     }
 
-    companion object CREATOR : Parcelable.Creator<Task> {
-        override fun createFromParcel(parcel: Parcel): Task {
-            return Task(parcel)
+    companion object CREATOR : Parcelable.Creator<Card> {
+        override fun createFromParcel(parcel: Parcel): Card {
+            return Card(parcel)
         }
 
-        override fun newArray(size: Int): Array<Task?> {
+        override fun newArray(size: Int): Array<Card?> {
             return arrayOfNulls(size)
         }
     }

@@ -48,12 +48,12 @@ open class TaskListItemsAdapter (
                 holder.itemView.cv_add_task_list_name.visibility = View.VISIBLE
             }
 
-            holder.itemView.ib_close_card_name.setOnClickListener {
+            holder.itemView.ib_close_list_name.setOnClickListener {
                 holder.itemView.tv_add_task_list.visibility = View.VISIBLE
                 holder.itemView.cv_add_task_list_name.visibility = View.GONE
             }
 
-            holder.itemView.ib_done_card_name.setOnClickListener {
+            holder.itemView.ib_done_list_name.setOnClickListener {
                 val listName = holder.itemView.et_task_list_name.text.toString()
                 if(listName.isNotEmpty()){
                     if(context is TaskListActivity){

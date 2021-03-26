@@ -102,7 +102,7 @@ class MyProfileActivity : BaseActivity() {
         val actionBar = supportActionBar
         if(actionBar != null){
             actionBar.setDisplayHomeAsUpEnabled(true)
-            actionBar.setHomeAsUpIndicator(R.drawable.ic_keyboard_arrow_left_black_24dp)
+            actionBar.setHomeAsUpIndicator(R.drawable.ic_back_white)
         }
 
         toolbar_my_profile_activity.setNavigationOnClickListener {

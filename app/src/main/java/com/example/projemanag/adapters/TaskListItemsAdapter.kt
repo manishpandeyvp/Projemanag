@@ -6,8 +6,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.example.projemanag.R
+import com.example.projemanag.activity.TaskListActivity
 import com.example.projemanag.models.Task
 import kotlinx.android.synthetic.main.item_task.view.*
 
@@ -52,7 +54,14 @@ open class TaskListItemsAdapter (
             }
 
             holder.itemView.ib_done_card_name.setOnClickListener {
-                // TODO create entry in DB and display the task list
+                val listName = holder.itemView.et_task_list_name.text.toString()
+                if(listName.isNotEmpty()){
+                    if(context is TaskListActivity){
+                        context.createTaskList(listName)
+                    }
+                }else{
+                    Toast.makeText(context, "Please enter list name!", Toast.LENGTH_SHORT).show()
+                }
             }
         }
     }

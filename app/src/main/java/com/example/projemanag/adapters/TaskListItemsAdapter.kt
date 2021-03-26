@@ -40,6 +40,20 @@ open class TaskListItemsAdapter (
                 holder.itemView.tv_add_task_list.visibility = View.GONE
                 holder.itemView.ll_task_item.visibility = View.VISIBLE
             }
+            holder.itemView.tv_task_list_title.text = model.title
+            holder.itemView.tv_add_task_list.setOnClickListener{
+                holder.itemView.tv_add_task_list.visibility = View.GONE
+                holder.itemView.cv_add_task_list_name.visibility = View.VISIBLE
+            }
+
+            holder.itemView.ib_close_card_name.setOnClickListener {
+                holder.itemView.tv_add_task_list.visibility = View.VISIBLE
+                holder.itemView.cv_add_task_list_name.visibility = View.GONE
+            }
+
+            holder.itemView.ib_done_card_name.setOnClickListener {
+                // TODO create entry in DB and display the task list
+            }
         }
     }
 

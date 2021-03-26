@@ -60,11 +60,27 @@ class FirestoreClass {
         mFireStore.collection(Constants.BOARDS).document(documentId).get().addOnSuccessListener {
                 document ->
             Log.i(activity.javaClass.simpleName, document.toString())
-            activity.boardDetails(document.toObject(Board::class.java)!!)
+            val board = document.toObject(Board::class.java)!!
+            board.documentId = documentId
+            activity.boardDetails(board)
         }.addOnFailureListener {
                 e ->
             activity.hideProgressDialog()
             Log.e(activity.javaClass.simpleName, "Error while loading board", e)
+        }
+    }
+
+    fun addUpdateTaskList(activity: TaskListActivity, board: Board){
+        val taskListHashMap = HashMap<String, Any>()
+        taskListHashMap[Constants.TASK_LIST] = board.taskList
+
+        mFireStore.collection(Constants.BOARDS).document(board.documentId).update(taskListHashMap).addOnSuccessListener {
+            Log.e(activity.javaClass.simpleName, "TaskList updated")
+            activity.addUpdateTaskListSuccess()
+        }.addOnFailureListener {
+            exception ->
+            activity.hideProgressDialog()
+            Log.e(activity.javaClass.simpleName, "Error in updating taskList", exception)
         }
     }
 

@@ -4,9 +4,12 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.WindowManager
 import com.example.projemanag.R
+import com.example.projemanag.models.Board
+import com.example.projemanag.utils.Constants
 import kotlinx.android.synthetic.main.activity_members.*
 
 class MembersActivity : AppCompatActivity() {
+    private lateinit var mBoardDetails: Board
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -18,6 +21,10 @@ class MembersActivity : AppCompatActivity() {
         )
 
         setupActionBar()
+
+        if(intent.hasExtra(Constants.BOARD_DETAIL)){
+            mBoardDetails = intent.getParcelableExtra<Board>(Constants.BOARD_DETAIL)!!
+        }
     }
 
     private fun setupActionBar(){

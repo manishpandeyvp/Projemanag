@@ -107,7 +107,7 @@ open class TaskListItemsAdapter (
                 val cardName = holder.itemView.et_card_name.text.toString()
                 if(cardName.isNotEmpty()){
                     if(context is TaskListActivity){
-                        // TODO add a card
+                        context.addCardToTaskList(position, cardName)
                     }
                 }else{
                     Toast.makeText(context, "Please enter a card name!", Toast.LENGTH_SHORT).show()

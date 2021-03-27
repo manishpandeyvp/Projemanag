@@ -105,7 +105,7 @@ class TaskListActivity : BaseActivity() {
 
         val cardAssignedUserList: ArrayList<String> = ArrayList()
         cardAssignedUserList.add(FirestoreClass().getCurrentUserId())
-        
+
         val card = Card(cardName, FirestoreClass().getCurrentUserId(), cardAssignedUserList)
 
         val cardsList = mBoardDetails.taskList[position].cards
@@ -116,5 +116,11 @@ class TaskListActivity : BaseActivity() {
             mBoardDetails.taskList[position].createdBy,
             cardsList
         )
+
+        mBoardDetails.taskList[position] = task
+
+        showProgressDialog(resources.getString(R.string.please_wait))
+
+        FirestoreClass().addUpdateTaskList(this, mBoardDetails)
     }
 }

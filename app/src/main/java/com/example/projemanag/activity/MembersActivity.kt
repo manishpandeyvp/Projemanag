@@ -1,5 +1,6 @@
 package com.example.projemanag.activity
 
+import android.app.Activity
 import android.app.Dialog
 import android.os.Bundle
 import android.view.Menu
@@ -19,6 +20,7 @@ import kotlinx.android.synthetic.main.dialog_search_member.*
 class MembersActivity : BaseActivity() {
     private lateinit var mBoardDetails: Board
     private lateinit var mAssignedMembersList: ArrayList<User>
+    private var anyChangesMade: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,6 +54,13 @@ class MembersActivity : BaseActivity() {
         }
     }
 
+    override fun onBackPressed() {
+        if(anyChangesMade){
+            setResult(Activity.RESULT_OK)
+        }
+        super.onBackPressed()
+    }
+
     fun setupMemberList(list: ArrayList<User>){
         mAssignedMembersList = list
         hideProgressDialog()
@@ -65,11 +74,13 @@ class MembersActivity : BaseActivity() {
 
     fun memberDetails(user: User){
         mBoardDetails.assignedTo.add(user.id)
+        FirestoreClass().assignMemberToBoard(this, mBoardDetails, user)
     }
 
     fun memberAssignSuccess(user: User){
         hideProgressDialog()
         mAssignedMembersList.add(user)
+        anyChangesMade = true
         setupMemberList(mAssignedMembersList)
     }
 

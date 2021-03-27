@@ -37,15 +37,14 @@
         android:layout_height="match_parent"
         android:gravity="center"
         android:orientation="vertical"
+        android:background="@android:color/white"
         android:padding="@dimen/members_content_padding">
 
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="@dimen/members_cv_marginTop"
-            android:background="@android:color/white"
-            android:elevation="@dimen/card_view_elevation"
-            app:cardCornerRadius="@dimen/card_view_corner_radius">
+            android:background="@android:color/white">
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv_members_list"

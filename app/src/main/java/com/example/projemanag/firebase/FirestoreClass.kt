@@ -154,4 +154,21 @@ class FirestoreClass {
             Log.e(activity.javaClass.simpleName, "Error while fetching members list!", e)
         }
     }
+
+    fun getMemberDetails(activity: MembersActivity, email: String){
+        mFireStore.collection(Constants.USERS).whereEqualTo(Constants.EMAIL, email).get().addOnSuccessListener {
+            document ->
+            if(document.documents.size > 0){
+                val user = document.documents[0].toObject(User::class.java)!!
+                activity.memberDetails(user)
+            }else{
+                activity.hideProgressDialog()
+                activity.showErrorSnackBar("No such member found!!")
+            }
+        }.addOnFailureListener {
+            e ->
+            activity.hideProgressDialog()
+            Log.e(activity.javaClass.simpleName, "Error while getting user details!", e)
+        }
+    }
 }

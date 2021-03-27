@@ -12,8 +12,7 @@ data class Task (
         parcel.readString()!!,
         parcel.readString()!!,
         parcel.createTypedArrayList(Card.CREATOR)!!
-    ) {
-    }
+    )
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeString(title)

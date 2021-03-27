@@ -1,18 +1,29 @@
 package com.example.projemanag.adapters
 
 import android.content.Context
+import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.example.projemanag.R
 import com.example.projemanag.models.Card
-import com.example.projemanag.models.Task
+import kotlinx.android.synthetic.main.item_card.view.*
 
 open class CardListItemsAdapter(
     private val context: Context,
     private val list: ArrayList<Card>
 ): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+
+    private var onClickListener: OnClickListener? = null
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        TODO("Not yet implemented")
+        return MyViewHolder(
+            LayoutInflater.from(context).inflate(
+                R.layout.item_card,
+                parent,
+                false
+            )
+        )
     }
 
     override fun getItemCount(): Int {
@@ -20,7 +31,19 @@ open class CardListItemsAdapter(
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        TODO("Not yet implemented")
+        val model = list[position]
+
+        if(holder is MyViewHolder){
+            holder.itemView.tv_card_name.text = model.name
+        }
+    }
+
+    fun setOnClickListener(onClickListener: OnClickListener){
+        this.onClickListener = onClickListener
+    }
+
+    interface OnClickListener {
+        fun onCLick(position: Int, card: Card)
     }
 
     private class MyViewHolder(view: View): RecyclerView.ViewHolder(view)

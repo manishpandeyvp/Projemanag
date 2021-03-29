@@ -14,6 +14,9 @@ open class LabelColorListItemsAdapter(
     private val list: ArrayList<String>,
     private val mSelectedColor: String
 ): RecyclerView.Adapter<RecyclerView.ViewHolder>(){
+
+    var onItemCLickListener: OnItemClickListener? = null
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return MyViewHolder(
             LayoutInflater.from(context).inflate(R.layout.item_label_color, parent, false)
@@ -28,10 +31,17 @@ open class LabelColorListItemsAdapter(
         val item = list[position]
         if(holder is MyViewHolder){
             holder.itemView.view_main.setBackgroundColor(Color.parseColor(item))
+
             if(item == mSelectedColor){
                 holder.itemView.iv_selected_color.visibility = View.VISIBLE
             }else{
                 holder.itemView.iv_selected_color.visibility = View.GONE
+            }
+
+            holder.itemView.setOnClickListener {
+                if(onItemCLickListener != null){
+                    onItemCLickListener!!.onCLick(position, item)
+                }
             }
         }
     }

@@ -26,6 +26,7 @@ abstract class LabelColorListDialog(
         setContentView(view)
         setCancelable(true)
         setCanceledOnTouchOutside(true)
+        setupRecyclerView(view)
     }
 
     private fun setupRecyclerView(view: View){
@@ -36,9 +37,12 @@ abstract class LabelColorListDialog(
 
         adapter!!.onItemCLickListener = object : LabelColorListItemsAdapter.OnItemClickListener{
             override fun onCLick(position: Int, color: String) {
-                
+                dismiss()
+                onItemSelected(color)
             }
         }
     }
+
+    protected abstract fun onItemSelected(color: String)
 
 }

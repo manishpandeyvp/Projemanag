@@ -1,15 +1,18 @@
 package com.example.projemanag.activity
 
 import android.app.Activity
+import android.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
+import android.view.MenuItem
 import android.view.WindowManager
 import android.widget.Toast
 import com.example.projemanag.R
 import com.example.projemanag.firebase.FirestoreClass
 import com.example.projemanag.models.Board
 import com.example.projemanag.models.Card
+import com.example.projemanag.models.Task
 import com.example.projemanag.utils.Constants
 import kotlinx.android.synthetic.main.activity_card_details.*
 
@@ -74,6 +77,16 @@ class CardDetailsActivity : BaseActivity() {
         return super.onCreateOptionsMenu(menu)
     }
 
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when(item.itemId){
+            R.id.action_delete_card -> {
+                alertDialogForDeleteCard(mBoardDetails.taskList[mTaskListPosition].cards[mCardPosition].name)
+                return true
+            }
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
     fun addUpdateTaskListSuccess(){
         hideProgressDialog()
         setResult(Activity.RESULT_OK)
@@ -93,7 +106,35 @@ class CardDetailsActivity : BaseActivity() {
         FirestoreClass().addUpdateTaskList(this@CardDetailsActivity, mBoardDetails)
     }
 
-    private fun deleteCards(){
+    private fun deleteCard(){
         val cardsList: ArrayList<Card> = mBoardDetails.taskList[mTaskListPosition].cards
+        cardsList.removeAt(mCardPosition)
+
+        val taskList: ArrayList<Task> = mBoardDetails.taskList
+        taskList.removeAt(taskList.size-1)
+
+        taskList[mTaskListPosition].cards = cardsList
+
+        showProgressDialog(resources.getString(R.string.please_wait))
+        FirestoreClass().addUpdateTaskList(this@CardDetailsActivity, mBoardDetails)
+    }
+
+    private fun alertDialogForDeleteCard(cardName: String){
+        val builder = AlertDialog.Builder(this)
+        builder.setTitle(resources.getString(R.string.alert))
+        builder.setMessage(resources.getString(R.string.confirmation_message_to_delete_card, cardName))
+        builder.setIcon(android.R.drawable.ic_dialog_alert)
+        builder.setPositiveButton("Yes"){
+            dialogInterface, _ ->
+            dialogInterface.dismiss()
+            deleteCard()
+        }
+        builder.setNegativeButton("No"){
+            dialogInterface, _ ->
+            dialogInterface.dismiss()
+        }
+        val alertDialog: AlertDialog = builder.create()
+        alertDialog.setCancelable(false)
+        alertDialog.show()
     }
 }

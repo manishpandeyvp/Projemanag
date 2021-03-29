@@ -145,7 +145,7 @@ class FirestoreClass {
         }
     }
 
-    fun getAssignedMemberListDetails(activity: MembersActivity, assignedTo: ArrayList<String>){
+    fun getAssignedMemberListDetails(activity: Activity, assignedTo: ArrayList<String>){
         mFireStore.collection(Constants.USERS).whereIn(Constants.ID, assignedTo).get().addOnSuccessListener {
             document ->
             Log.e(activity.javaClass.simpleName, document.documents.toString())
@@ -155,10 +155,20 @@ class FirestoreClass {
                 usersList.add(user)
             }
 
-            activity.setupMemberList(usersList)
+            if(activity is MembersActivity){
+                activity.setupMemberList(usersList)
+            }else if(activity is TaskListActivity){
+                activity.boardMembersDetailsList(usersList)
+            }
+
         }.addOnFailureListener {
             e ->
-            activity.hideProgressDialog()
+            if(activity is MembersActivity){
+                activity.hideProgressDialog()
+            }else if(activity is TaskListActivity){
+                activity.hideProgressDialog()
+            }
+
             Log.e(activity.javaClass.simpleName, "Error while fetching members list!", e)
         }
     }

@@ -14,6 +14,7 @@ import com.example.projemanag.firebase.FirestoreClass
 import com.example.projemanag.models.Board
 import com.example.projemanag.models.Card
 import com.example.projemanag.models.Task
+import com.example.projemanag.models.User
 import com.example.projemanag.utils.Constants
 import kotlinx.android.synthetic.main.activity_task_list.*
 
@@ -21,6 +22,7 @@ class TaskListActivity : BaseActivity() {
 
     private lateinit var mBoardDetails: Board
     private lateinit var mBoardDocumentId: String
+    private lateinit var mAssignedMembersDetailList: ArrayList<User>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,7 +42,6 @@ class TaskListActivity : BaseActivity() {
     }
 
     fun boardDetails(board: Board){
-
         mBoardDetails = board
         hideProgressDialog()
         setupActionBar()
@@ -52,6 +53,9 @@ class TaskListActivity : BaseActivity() {
         rv_task_list.setHasFixedSize(true)
         val adapter = TaskListItemsAdapter(this, board.taskList)
         rv_task_list.adapter = adapter
+
+        showProgressDialog(resources.getString(R.string.please_wait))
+        FirestoreClass().getAssignedMemberListDetails(this, mBoardDetails.assignedTo)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -100,6 +104,11 @@ class TaskListActivity : BaseActivity() {
         hideProgressDialog()
         showProgressDialog(resources.getString(R.string.please_wait))
         FirestoreClass().getBoardDetails(this, mBoardDetails.documentId)
+    }
+
+    fun boardMembersDetailsList(list: ArrayList<User>){
+        mAssignedMembersDetailList = list
+        hideProgressDialog()
     }
 
     fun createTaskList(taskListName: String){
@@ -160,6 +169,7 @@ class TaskListActivity : BaseActivity() {
         intent.putExtra(Constants.BOARD_DETAIL, mBoardDetails)
         intent.putExtra(Constants.TASK_LIST_ITEM_POSITION, taskListPosition)
         intent.putExtra(Constants.CARD_LIST_ITEM_POSITION, cardPosition)
+        intent.putExtra(Constants.BOARD_MEMBERS_LIST, mAssignedMembersDetailList)
         startActivityForResult(intent, CARD_DETAILS_REQUEST_CODE)
     }
 

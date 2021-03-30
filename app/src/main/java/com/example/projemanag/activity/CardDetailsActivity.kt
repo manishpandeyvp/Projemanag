@@ -11,6 +11,7 @@ import android.view.WindowManager
 import android.widget.Toast
 import com.example.projemanag.R
 import com.example.projemanag.dialogs.LabelColorListDialog
+import com.example.projemanag.dialogs.MembersListDialog
 import com.example.projemanag.firebase.FirestoreClass
 import com.example.projemanag.models.Board
 import com.example.projemanag.models.Card
@@ -56,6 +57,10 @@ class CardDetailsActivity : BaseActivity() {
 
         tv_select_label_color.setOnClickListener {
             labelColorsListDialog()
+        }
+
+        tv_select_members.setOnClickListener {
+            membersListDialog()
         }
     }
 
@@ -138,6 +143,34 @@ class CardDetailsActivity : BaseActivity() {
 
         showProgressDialog(resources.getString(R.string.please_wait))
         FirestoreClass().addUpdateTaskList(this@CardDetailsActivity, mBoardDetails)
+    }
+
+    private fun membersListDialog(){
+        val cardAssignedMembersList = mBoardDetails.taskList[mTaskListPosition].cards[mCardPosition].assignedTo
+        if(cardAssignedMembersList.size > 0){
+            for(i in mMembersDetailList.indices){
+                for(j in cardAssignedMembersList){
+                    if(mMembersDetailList[i].id == j){
+                        mMembersDetailList[i].selected = true
+                    }
+                }
+            }
+        }else{
+            for(i in mMembersDetailList.indices){
+                mMembersDetailList[i].selected = false
+            }
+        }
+
+        val listDialog = object : MembersListDialog(
+            this,
+            mMembersDetailList,
+            resources.getString(R.string.str_select_member)
+        ){
+            override fun onItemSelected(user: User, action: String) {
+                // TODO implement the selected member functionality
+            }
+        }
+        listDialog.show()
     }
 
     private fun alertDialogForDeleteCard(cardName: String){

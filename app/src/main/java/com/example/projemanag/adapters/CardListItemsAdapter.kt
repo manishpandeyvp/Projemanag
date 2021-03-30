@@ -7,7 +7,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.projemanag.R
+import com.example.projemanag.activity.TaskListActivity
 import com.example.projemanag.models.Card
+import com.example.projemanag.models.SelectedMembers
 import kotlinx.android.synthetic.main.item_card.view.*
 
 open class CardListItemsAdapter(
@@ -42,6 +44,29 @@ open class CardListItemsAdapter(
                 holder.itemView.view_label_color.visibility = View.GONE
             }
             holder.itemView.tv_card_name.text = model.name
+
+            if((context as TaskListActivity).mAssignedMembersDetailList.size > 0){
+                val selectedMembersList: ArrayList<SelectedMembers> = ArrayList()
+
+                for(i in context.mAssignedMembersDetailList.indices){
+                    for(j in model.assignedTo){
+                        if(context.mAssignedMembersDetailList[i].id == j){
+                            val selectedMembers = SelectedMembers(
+                                context.mAssignedMembersDetailList[i].id,
+                                context.mAssignedMembersDetailList[i].image
+                            )
+                            selectedMembersList.add(selectedMembers)
+                        }
+                    }
+                }
+
+                if(selectedMembersList.size > 0){
+                    if(selectedMembersList.size == 1 && selectedMembersList[0].id == model.createdBy){
+                        holder.itemView.rv_card_selected_members_list.visibility = View.GONE
+                    }
+                }
+            }
+
             holder.itemView.setOnClickListener {
                 if(onClickListener != null){
                     onClickListener!!.onCLick(position)

@@ -3,14 +3,15 @@ package com.example.projemanag.activity
 import android.app.Activity
 import android.app.AlertDialog
 import android.graphics.Color
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.view.WindowManager
 import android.widget.Toast
+import androidx.recyclerview.widget.GridLayoutManager
 import com.example.projemanag.R
+import com.example.projemanag.adapters.CardMemberListItemsAdapter
 import com.example.projemanag.dialogs.LabelColorListDialog
 import com.example.projemanag.dialogs.MembersListDialog
 import com.example.projemanag.firebase.FirestoreClass
@@ -60,6 +61,8 @@ class CardDetailsActivity : BaseActivity() {
         tv_select_members.setOnClickListener {
             membersListDialog()
         }
+
+        setupSelectedMembersList()
     }
 
     private fun setupActionBar(){
@@ -165,7 +168,21 @@ class CardDetailsActivity : BaseActivity() {
             resources.getString(R.string.str_select_member)
         ){
             override fun onItemSelected(user: User, action: String) {
-                // TODO implement the selected member functionality
+                if(action == Constants.SELECT){
+                    if(!mBoardDetails.taskList[mTaskListPosition].cards[mCardPosition].assignedTo.contains(user.id)){
+                        mBoardDetails.taskList[mTaskListPosition].cards[mCardPosition].assignedTo.add(user.id)
+                    }
+                }else{
+                    mBoardDetails.taskList[mTaskListPosition].cards[mCardPosition].assignedTo.remove(user.id)
+
+                    for(i in mMembersDetailList.indices){
+                        if(mMembersDetailList[i].id == user.id){
+                            mMembersDetailList[i].selected = false
+                        }
+                    }
+                }
+
+                setupSelectedMembersList()
             }
         }
         listDialog.show()
@@ -191,6 +208,24 @@ class CardDetailsActivity : BaseActivity() {
             selectedMembersList.add(SelectedMembers("", ""))
             tv_select_members.visibility = View.GONE
             rv_selected_members_list.visibility = View.VISIBLE
+
+            rv_selected_members_list.layoutManager = GridLayoutManager(
+                this,
+                6
+            )
+
+            val adapter = CardMemberListItemsAdapter(this, selectedMembersList)
+            rv_selected_members_list.adapter = adapter
+            adapter.setOnClickListener(
+                object : CardMemberListItemsAdapter.OnClickListener{
+                    override fun onCLick() {
+                        membersListDialog()
+                    }
+                }
+            )
+        }else{
+            tv_select_members.visibility = View.VISIBLE
+            rv_selected_members_list.visibility = View.GONE
         }
     }
 

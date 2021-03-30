@@ -7,16 +7,14 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import android.view.WindowManager
 import android.widget.Toast
 import com.example.projemanag.R
 import com.example.projemanag.dialogs.LabelColorListDialog
 import com.example.projemanag.dialogs.MembersListDialog
 import com.example.projemanag.firebase.FirestoreClass
-import com.example.projemanag.models.Board
-import com.example.projemanag.models.Card
-import com.example.projemanag.models.Task
-import com.example.projemanag.models.User
+import com.example.projemanag.models.*
 import com.example.projemanag.utils.Constants
 import kotlinx.android.synthetic.main.activity_card_details.*
 
@@ -171,6 +169,29 @@ class CardDetailsActivity : BaseActivity() {
             }
         }
         listDialog.show()
+    }
+
+    private fun setupSelectedMembersList(){
+        var cardAssignedMembersList = mBoardDetails.taskList[mTaskListPosition].cards[mCardPosition].assignedTo
+        val selectedMembersList: ArrayList<SelectedMembers> = ArrayList()
+
+        for(i in mMembersDetailList.indices){
+            for(j in cardAssignedMembersList){
+                if(mMembersDetailList[i].id == j){
+                    val selectedMember = SelectedMembers(
+                        mMembersDetailList[i].id,
+                        mMembersDetailList[i].image
+                    )
+                    selectedMembersList.add(selectedMember)
+                }
+            }
+        }
+
+        if(selectedMembersList.size > 0){
+            selectedMembersList.add(SelectedMembers("", ""))
+            tv_select_members.visibility = View.GONE
+            rv_selected_members_list.visibility = View.VISIBLE
+        }
     }
 
     private fun alertDialogForDeleteCard(cardName: String){

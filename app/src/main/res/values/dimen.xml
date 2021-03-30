@@ -118,7 +118,7 @@
 
     <dimen name="item_card_cv_elevation">5dp</dimen>
 
-    <dimen name="item_card_label_height">15dp</dimen>
+    <dimen name="item_card_label_height">5dp</dimen>
 
     <dimen name="item_card_name_text_padding">10dp</dimen>
 

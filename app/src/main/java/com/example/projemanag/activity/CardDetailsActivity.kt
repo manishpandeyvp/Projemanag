@@ -118,7 +118,10 @@ class CardDetailsActivity : BaseActivity() {
             mSelectedColor
         )
 
-        mBoardDetails.taskList[mTaskListPosition].cards[mCardPosition] = card
+        val taskList: ArrayList<Task> = mBoardDetails.taskList
+        taskList.removeAt(taskList.size-1)
+
+        taskList[mTaskListPosition].cards[mCardPosition] = card
 
         showProgressDialog(resources.getString(R.string.please_wait))
         FirestoreClass().addUpdateTaskList(this@CardDetailsActivity, mBoardDetails)

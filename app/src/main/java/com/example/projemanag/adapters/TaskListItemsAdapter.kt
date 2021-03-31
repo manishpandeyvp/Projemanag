@@ -184,6 +184,8 @@ open class TaskListItemsAdapter (
 
                 }
             )
+
+            helper.attachToRecyclerView(holder.itemView.rv_card_list)
         }
     }
 

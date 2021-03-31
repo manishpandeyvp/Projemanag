@@ -18,8 +18,12 @@ import com.example.projemanag.models.User
 import com.example.projemanag.utils.Constants
 import kotlinx.android.synthetic.main.activity_members.*
 import kotlinx.android.synthetic.main.dialog_search_member.*
+import org.json.JSONObject
+import java.io.BufferedReader
 import java.io.DataOutputStream
+import java.io.InputStreamReader
 import java.lang.Exception
+import java.lang.StringBuilder
 import java.net.HttpURLConnection
 import java.net.URL
 
@@ -124,7 +128,7 @@ class MembersActivity : BaseActivity() {
         dialog.show()
     }
 
-    private inner class SendNotificationToUserAsyncTask: AsyncTask<Any, Void, String>(){
+    private inner class SendNotificationToUserAsyncTask(val boardName: String, val token: String): AsyncTask<Any, Void, String>(){
 
         override fun onPreExecute() {
             super.onPreExecute()
@@ -148,9 +152,29 @@ class MembersActivity : BaseActivity() {
                 connection.useCaches = false
 
                 val wr = DataOutputStream(connection.outputStream)
-                
-            }catch (e: Exception){
+                val jsonObject = JSONObject()
+                val dataObject = JSONObject()
+                dataObject.put(Constants.FCM_KEY_TITLE,"Assigned to the board $boardName")
+                dataObject.put(Constants.FCM_KEY_MESSAGE,"You have been assigned to the board by ${mAssignedMembersList[0].name}")
+                jsonObject.put(Constants.FCM_KEY_DATA, dataObject)
+                jsonObject.put(Constants.FCM_KEY_TO, token)
+                wr.writeBytes(jsonObject.toString())
+                wr.flush()
+                wr.close()
+                val httpResult: Int = connection.responseCode
 
+                if(httpResult == HttpURLConnection.HTTP_OK){
+                    val inputStream = connection.inputStream
+                    val reader = BufferedReader(InputStreamReader(inputStream))
+                    val sb = StringBuilder()
+                    var line: String?
+                    try{
+                        while (reader.readLine().also { line=it } != null){
+                            sb.append(line+"\n")
+                        }
+                    }
+                }
+            }catch (e: Exception){
             }
             return result
         }

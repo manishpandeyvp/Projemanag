@@ -2,7 +2,9 @@ package com.example.projemanag.activity
 
 import android.app.Activity
 import android.app.Dialog
+import android.os.AsyncTask
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.WindowManager
@@ -16,6 +18,10 @@ import com.example.projemanag.models.User
 import com.example.projemanag.utils.Constants
 import kotlinx.android.synthetic.main.activity_members.*
 import kotlinx.android.synthetic.main.dialog_search_member.*
+import java.io.DataOutputStream
+import java.lang.Exception
+import java.net.HttpURLConnection
+import java.net.URL
 
 class MembersActivity : BaseActivity() {
     private lateinit var mBoardDetails: Board
@@ -116,5 +122,44 @@ class MembersActivity : BaseActivity() {
             dialog.dismiss()
         }
         dialog.show()
+    }
+
+    private inner class SendNotificationToUserAsyncTask: AsyncTask<Any, Void, String>(){
+
+        override fun onPreExecute() {
+            super.onPreExecute()
+            showProgressDialog(resources.getString(R.string.please_wait))
+        }
+
+        override fun doInBackground(vararg params: Any?): String {
+            var result: String
+            var connection: HttpURLConnection? = null
+            try{
+                val url = URL(Constants.FCM_BASE_URL)
+                connection = url.openConnection() as HttpURLConnection
+                connection.doOutput = true
+                connection.doInput = true
+                connection.instanceFollowRedirects = false
+                connection.requestMethod = "POST"
+                connection.setRequestProperty("Content-Type", "application/json")
+                connection.setRequestProperty("charset", "utf-8")
+                connection.setRequestProperty("Accept", "application/json")
+                connection.setRequestProperty(Constants.FCM_AUTHORIZATION, "${Constants.FCM_KEY}=${Constants.FCM_SERVER_KEY}")
+                connection.useCaches = false
+
+                val wr = DataOutputStream(connection.outputStream)
+                
+            }catch (e: Exception){
+
+            }
+            return result
+        }
+
+        override fun onPostExecute(result: String?) {
+            super.onPostExecute(result)
+            hideProgressDialog()
+            Log.e("JSON response result", result!!)
+        }
+
     }
 }

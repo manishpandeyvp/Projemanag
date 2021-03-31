@@ -75,6 +75,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
     }
 
     fun updateNavigationUserDetails(user: User, readBoardsList: Boolean){
+        hideProgressDialog()
         mUserName = user.name
         Glide.with(this).load(user.image).centerCrop().placeholder(R.drawable.ic_person_black_24dp).into(nav_user_image)
         tv_username.text = user.name
@@ -108,6 +109,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
             }
             R.id.nav_sign_out -> {
                 FirebaseAuth.getInstance().signOut()
+                mSharedPreferences.edit().clear().apply()
                 val intent = Intent(this, IntroActivity::class.java)
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
                 startActivity(intent)

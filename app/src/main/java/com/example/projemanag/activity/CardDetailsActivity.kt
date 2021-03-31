@@ -68,6 +68,19 @@ class CardDetailsActivity : BaseActivity() {
         }
 
         setupSelectedMembersList()
+
+        mSelectedDueDateMilliSeconds = mBoardDetails.taskList[mTaskListPosition].cards[mCardPosition].dueDate
+
+        if(mSelectedDueDateMilliSeconds > 0){
+            val simpleDateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH)
+            val selectedDate = simpleDateFormat.format(Date(mSelectedDueDateMilliSeconds))
+
+            tv_select_due_date.text = selectedDate
+        }
+
+        tv_select_due_date.setOnClickListener {
+            showDataPicker()
+        }
     }
 
     private fun setupActionBar(){
@@ -126,7 +139,8 @@ class CardDetailsActivity : BaseActivity() {
             et_name_card_details.text.toString(),
             mBoardDetails.taskList[mTaskListPosition].cards[mCardPosition].createdBy,
             mBoardDetails.taskList[mTaskListPosition].cards[mCardPosition].assignedTo,
-            mSelectedColor
+            mSelectedColor,
+            mSelectedDueDateMilliSeconds
         )
 
         val taskList: ArrayList<Task> = mBoardDetails.taskList
@@ -305,7 +319,6 @@ class CardDetailsActivity : BaseActivity() {
                 tv_select_due_date.text = selectedDate
 
                 val sdf = SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH)
-
                 val theDate = sdf.parse(selectedDate)
 
                 mSelectedDueDateMilliSeconds = theDate!!.time

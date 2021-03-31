@@ -5,11 +5,13 @@ import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.projemanag.R
 import com.example.projemanag.activity.TaskListActivity
 import com.example.projemanag.models.Card
 import com.example.projemanag.models.SelectedMembers
+import kotlinx.android.synthetic.main.activity_card_details.view.*
 import kotlinx.android.synthetic.main.item_card.view.*
 
 open class CardListItemsAdapter(
@@ -63,7 +65,24 @@ open class CardListItemsAdapter(
                 if(selectedMembersList.size > 0){
                     if(selectedMembersList.size == 1 && selectedMembersList[0].id == model.createdBy){
                         holder.itemView.rv_card_selected_members_list.visibility = View.GONE
+                    }else{
+                        holder.itemView.rv_card_selected_members_list.visibility = View.VISIBLE
+
+                        holder.itemView.rv_card_selected_members_list.layoutManager = GridLayoutManager(context, 4)
+                        val adapter = CardMemberListItemsAdapter(context, selectedMembersList, false)
+                        holder.itemView.rv_card_selected_members_list.adapter = adapter
+                        adapter.setOnClickListener(
+                            object : CardMemberListItemsAdapter.OnClickListener{
+                                override fun onCLick() {
+                                    if(onClickListener != null){
+                                        onClickListener!!.onCLick(position)
+                                    }
+                                }
+                            }
+                        )
                     }
+                }else{
+                    holder.itemView.rv_selected_members_list.visibility = View.GONE
                 }
             }
 

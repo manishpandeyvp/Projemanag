@@ -2,6 +2,7 @@ package com.example.projemanag.activity
 
 import android.app.Activity
 import android.app.AlertDialog
+import android.app.DatePickerDialog
 import android.graphics.Color
 import android.os.Bundle
 import android.view.Menu
@@ -18,6 +19,9 @@ import com.example.projemanag.firebase.FirestoreClass
 import com.example.projemanag.models.*
 import com.example.projemanag.utils.Constants
 import kotlinx.android.synthetic.main.activity_card_details.*
+import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.collections.ArrayList
 
 class CardDetailsActivity : BaseActivity() {
 
@@ -26,6 +30,7 @@ class CardDetailsActivity : BaseActivity() {
     private var mCardPosition = -1
     private var mSelectedColor = ""
     private lateinit var mMembersDetailList: ArrayList<User>
+    private var mSelectedDueDateMilliSeconds: Long = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -189,7 +194,7 @@ class CardDetailsActivity : BaseActivity() {
     }
 
     private fun setupSelectedMembersList(){
-        var cardAssignedMembersList = mBoardDetails.taskList[mTaskListPosition].cards[mCardPosition].assignedTo
+        val cardAssignedMembersList = mBoardDetails.taskList[mTaskListPosition].cards[mCardPosition].assignedTo
         val selectedMembersList: ArrayList<SelectedMembers> = ArrayList()
 
         for(i in mMembersDetailList.indices){
@@ -214,7 +219,7 @@ class CardDetailsActivity : BaseActivity() {
                 6
             )
 
-            val adapter = CardMemberListItemsAdapter(this, selectedMembersList)
+            val adapter = CardMemberListItemsAdapter(this, selectedMembersList, true)
             rv_selected_members_list.adapter = adapter
             adapter.setOnClickListener(
                 object : CardMemberListItemsAdapter.OnClickListener{
@@ -280,5 +285,35 @@ class CardDetailsActivity : BaseActivity() {
             }
         }
         listDialog.show()
+    }
+
+    private fun showDataPicker() {
+        val c = Calendar.getInstance()
+        val year =
+            c.get(Calendar.YEAR)
+        val month = c.get(Calendar.MONTH)
+        val day = c.get(Calendar.DAY_OF_MONTH)
+
+        val dpd = DatePickerDialog(
+            this,
+            DatePickerDialog.OnDateSetListener { _, year, monthOfYear, dayOfMonth ->
+                val sDayOfMonth = if (dayOfMonth < 10) "0$dayOfMonth" else "$dayOfMonth"
+                val sMonthOfYear =
+                    if ((monthOfYear + 1) < 10) "0${monthOfYear + 1}" else "${monthOfYear + 1}"
+
+                val selectedDate = "$sDayOfMonth/$sMonthOfYear/$year"
+                tv_select_due_date.text = selectedDate
+
+                val sdf = SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH)
+
+                val theDate = sdf.parse(selectedDate)
+
+                mSelectedDueDateMilliSeconds = theDate!!.time
+            },
+            year,
+            month,
+            day
+        )
+        dpd.show()
     }
 }

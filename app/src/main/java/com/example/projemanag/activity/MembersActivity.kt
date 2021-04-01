@@ -21,10 +21,12 @@ import kotlinx.android.synthetic.main.dialog_search_member.*
 import org.json.JSONObject
 import java.io.BufferedReader
 import java.io.DataOutputStream
+import java.io.IOException
 import java.io.InputStreamReader
 import java.lang.Exception
 import java.lang.StringBuilder
 import java.net.HttpURLConnection
+import java.net.SocketTimeoutException
 import java.net.URL
 
 class MembersActivity : BaseActivity() {
@@ -92,6 +94,7 @@ class MembersActivity : BaseActivity() {
         mAssignedMembersList.add(user)
         anyChangesMade = true
         setupMemberList(mAssignedMembersList)
+        SendNotificationToUserAsyncTask(mBoardDetails.name, user.fcmToken).execute()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -172,9 +175,25 @@ class MembersActivity : BaseActivity() {
                         while (reader.readLine().also { line=it } != null){
                             sb.append(line+"\n")
                         }
+                    }catch (e: IOException){
+                        e.printStackTrace()
+                    }finally {
+                        try{
+                            inputStream.close()
+                        }catch (e: IOException){
+                            e.printStackTrace()
+                        }
                     }
+                    result = sb.toString()
+                }else{
+                    result = connection.responseMessage
                 }
+            }catch (e: SocketTimeoutException){
+                result = "Connection Timeout"
             }catch (e: Exception){
+                result = "Error: " + e.message
+            }finally {
+                connection?.disconnect()
             }
             return result
         }

@@ -1,7 +1,6 @@
 package com.example.projemanag.activity
 
 import android.app.Dialog
-import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler

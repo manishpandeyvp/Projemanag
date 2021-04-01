@@ -58,7 +58,7 @@ class SignInActivity : BaseActivity() {
 //                hideProgressDialog()
                 if(task.isSuccessful){
                     Log.d("Sign in", "signInWithEmail: Success")
-                    val user = auth.currentUser
+//                    val user = auth.currentUser
                     FirestoreClass().loadUserData(this)
 //                    startActivity(Intent(this, MainActivity::class.java))
                 } else {

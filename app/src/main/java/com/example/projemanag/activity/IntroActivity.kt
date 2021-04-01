@@ -1,7 +1,6 @@
 package com.example.projemanag.activity
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.WindowManager
 import com.example.projemanag.R
